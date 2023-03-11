@@ -1,20 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import BorrowListScreen from "./screens/BorrowListScreen";
+import BottomView from "./screens/BottomView";
+
+import HomeScreen from "./screens/HomeScreen";
+
+export type RootStackParamList = {
+  Home: undefined;
+  ItemList: undefined;
+  BorrowList: undefined;
+  BottomView: undefined;
+  BottomContent: undefined;
+};
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? -64 : 0}
+        >
+          <Stack.Navigator>
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Home"
+              component={HomeScreen}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="BorrowList"
+              component={BorrowListScreen}
+            />
+            <Stack.Screen
+              name="BottomView"
+              component={BottomView}
+              options={{ headerShown: false, presentation: "modal" }}
+            />
+          </Stack.Navigator>
+        </KeyboardAvoidingView>
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
